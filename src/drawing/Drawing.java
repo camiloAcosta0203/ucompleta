@@ -18,6 +18,8 @@ public class Drawing {
         // TODO code application logic here
         
         System.out.println("Holi :c");
+        
+        System.out.println("Eliot :v");
     }
     
 }
