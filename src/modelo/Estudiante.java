@@ -53,6 +53,17 @@ public class Estudiante {
         this.jornada = jornada;
     }
 
+    public Estudiante(String identificacione, String codigoe, String nombre1e, String apellido1e, String direccione, String correoe, String Fotoestudiante, String jornada) {
+        this.identificacione = identificacione;
+        this.codigoe = codigoe;
+        this.nombre1e = nombre1e;
+        this.apellido1e = apellido1e;
+        this.direccione = direccione;
+        this.correoe = correoe;
+        this.Fotoestudiante = Fotoestudiante;
+        this.jornada = jornada;
+    }
+
     /**
      * Get the value of Fotoestudiante
      *
