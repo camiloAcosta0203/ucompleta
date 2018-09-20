@@ -214,13 +214,13 @@ public class InsertarEstudiante extends javax.swing.JFrame {
         String correoe = jTextField6.getText();
         String jornada = jTextField7.getText();
 
-        le.add(new Estudiante(identificacione, codigoe, nombre1e, apellido1e, direccione, correoe, Rutaimage, jornada));
+        le.add(new Estudiante(identificacione, codigoe, nombre1e, apellido1e, direccione, correoe, jornada,Rutaimage ));
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        boolean t = ControlEstudiante.insertEstudiante(le);
+        boolean t = ControlEstudiante.insertEstudianteFoto(le);
 
         if (t) {
             JOptionPane.showMessageDialog(rootPane, "Usuario Insertado Con Éxito");
