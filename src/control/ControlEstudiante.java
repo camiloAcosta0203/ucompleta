@@ -13,6 +13,8 @@ import modelo.Estudiante;
  * @author dacastro
  */
 public class ControlEstudiante {
+    
+    //hola 1
 
     public ControlEstudiante() {
     }
@@ -29,7 +31,8 @@ public class ControlEstudiante {
 
         }
         return ins;
+        
 
     }
-
+ 
 }
