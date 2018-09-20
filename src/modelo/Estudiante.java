@@ -53,7 +53,7 @@ public class Estudiante {
         this.jornada = jornada;
     }
 
-    public Estudiante(String identificacione, String codigoe, String nombre1e, String apellido1e, String direccione, String correoe, String Fotoestudiante, String jornada) {
+    public Estudiante(String identificacione, String codigoe, String nombre1e, String apellido1e, String direccione, String correoe, String jornada, String Fotoestudiante) {
         this.identificacione = identificacione;
         this.codigoe = codigoe;
         this.nombre1e = nombre1e;
