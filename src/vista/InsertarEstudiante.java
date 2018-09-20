@@ -214,7 +214,7 @@ public class InsertarEstudiante extends javax.swing.JFrame {
         String correoe = jTextField6.getText();
         String jornada = jTextField7.getText();
 
-        le.add(new Estudiante(identificacione, codigoe, nombre1e, apellido1e, direccione, correoe, jornada));
+        le.add(new Estudiante(identificacione, codigoe, nombre1e, apellido1e, direccione, correoe, Rutaimage, jornada));
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
