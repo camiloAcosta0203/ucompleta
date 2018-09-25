@@ -1,0 +1,179 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema proyectodrawing
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema proyectodrawing
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `proyectodrawing` DEFAULT CHARACTER SET utf8 ;
+USE `proyectodrawing` ;
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`usuario` (
+  `idusuario` INT NOT NULL AUTO_INCREMENT,
+  `nombre1u` VARCHAR(45) NOT NULL,
+  `nombre2u` VARCHAR(45) NULL,
+  `apellido1u` VARCHAR(45) NOT NULL,
+  `apellido2u` VARCHAR(45) NULL,
+  `telefono` VARCHAR(45) NOT NULL,
+  `correo` VARCHAR(45) NOT NULL,
+  `fecha_ingreso` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idusuario`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`administrador`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`administrador` (
+  `idadministrador` INT NOT NULL AUTO_INCREMENT,
+  `nombre1a` VARCHAR(45) NOT NULL,
+  `nombre2a` VARCHAR(45) NULL,
+  `apellido1a` VARCHAR(45) NOT NULL,
+  `apellido2a` VARCHAR(45) NULL,
+  `telefono` VARCHAR(45) NOT NULL,
+  `correo` VARCHAR(45) NOT NULL,
+  `fecha_ingreso` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idadministrador`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`curso`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`curso` (
+  `idcurso` INT NOT NULL AUTO_INCREMENT,
+  `nombre_curso` VARCHAR(45) NOT NULL,
+  `duracion` VARCHAR(45) NOT NULL,
+  `idadministradorC` INT NOT NULL,
+  PRIMARY KEY (`idcurso`, `idadministradorC`),
+  INDEX `fk_curso_administrador1_idx` (`idadministradorC` ASC),
+  CONSTRAINT `fk_curso_administrador1`
+    FOREIGN KEY (`idadministradorC`)
+    REFERENCES `proyectodrawing`.`administrador` (`idadministrador`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`matricula`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`matricula` (
+  `idmatricula` INT NOT NULL AUTO_INCREMENT,
+  `estado` TINYINT(1) NOT NULL,
+  `fecha_matricula` VARCHAR(45) NULL,
+  `idusuarioM` INT NOT NULL,
+  `idcursoM` INT NOT NULL,
+  PRIMARY KEY (`idmatricula`, `idusuarioM`, `idcursoM`),
+  INDEX `fk_matricula_usuario_idx` (`idusuarioM` ASC),
+  INDEX `fk_matricula_curso1_idx` (`idcursoM` ASC),
+  CONSTRAINT `fk_matricula_usuario`
+    FOREIGN KEY (`idusuarioM`)
+    REFERENCES `proyectodrawing`.`usuario` (`idusuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_matricula_curso1`
+    FOREIGN KEY (`idcursoM`)
+    REFERENCES `proyectodrawing`.`curso` (`idcurso`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`opinion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`opinion` (
+  `idopinion` INT NOT NULL AUTO_INCREMENT,
+  `calificacion` VARCHAR(45) NOT NULL,
+  `descrip` VARCHAR(100) NULL,
+  `idusuarioO` INT NOT NULL,
+  `idcursoO` INT NOT NULL,
+  PRIMARY KEY (`idopinion`, `idusuarioO`, `idcursoO`),
+  INDEX `fk_opinion_usuario1_idx` (`idusuarioO` ASC),
+  INDEX `fk_opinion_curso1_idx` (`idcursoO` ASC),
+  CONSTRAINT `fk_opinion_usuario1`
+    FOREIGN KEY (`idusuarioO`)
+    REFERENCES `proyectodrawing`.`usuario` (`idusuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_opinion_curso1`
+    FOREIGN KEY (`idcursoO`)
+    REFERENCES `proyectodrawing`.`curso` (`idcurso`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`modulo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`modulo` (
+  `idmodulo` INT NOT NULL AUTO_INCREMENT,
+  `nombre_modulo` VARCHAR(45) NOT NULL,
+  `numero_modulo` VARCHAR(45) NOT NULL,
+  `idcursoM` INT NOT NULL,
+  `idadministradorM` INT NOT NULL,
+  PRIMARY KEY (`idmodulo`, `idcursoM`, `idadministradorM`),
+  INDEX `fk_modulo_curso1_idx` (`idcursoM` ASC, `idadministradorM` ASC),
+  CONSTRAINT `fk_modulo_curso1`
+    FOREIGN KEY (`idcursoM` , `idadministradorM`)
+    REFERENCES `proyectodrawing`.`curso` (`idcurso` , `idadministradorC`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`imagen`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`imagen` (
+  `idimagen` INT NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(45) NOT NULL,
+  `descri` VARCHAR(45) NOT NULL,
+  `imagen` LONGBLOB NOT NULL,
+  `idmoduloI` INT NOT NULL,
+  `idcursoI` INT NOT NULL,
+  `idadministradorI` INT NOT NULL,
+  PRIMARY KEY (`idimagen`, `idmoduloI`, `idcursoI`, `idadministradorI`),
+  INDEX `fk_imagen_modulo1_idx` (`idmoduloI` ASC, `idcursoI` ASC, `idadministradorI` ASC),
+  CONSTRAINT `fk_imagen_modulo1`
+    FOREIGN KEY (`idmoduloI` , `idcursoI` , `idadministradorI`)
+    REFERENCES `proyectodrawing`.`modulo` (`idmodulo` , `idcursoM` , `idadministradorM`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `proyectodrawing`.`documento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proyectodrawing`.`documento` (
+  `iddocumento` INT NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(45) NOT NULL,
+  `descri` VARCHAR(45) NOT NULL,
+  `idmoduloD` INT NOT NULL,
+  `idcursoD` INT NOT NULL,
+  `idadministradorD` INT NOT NULL,
+  PRIMARY KEY (`iddocumento`, `idmoduloD`, `idcursoD`, `idadministradorD`),
+  INDEX `fk_documento_modulo1_idx` (`idmoduloD` ASC, `idcursoD` ASC, `idadministradorD` ASC),
+  CONSTRAINT `fk_documento_modulo1`
+    FOREIGN KEY (`idmoduloD` , `idcursoD` , `idadministradorD`)
+    REFERENCES `proyectodrawing`.`modulo` (`idmodulo` , `idcursoM` , `idadministradorM`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

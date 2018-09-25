@@ -5,6 +5,11 @@
  */
 package Interfaces;
 
+import Base_de_Datos.Conexiones;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,8 +21,39 @@ public class Contraseña extends javax.swing.JFrame {
     /**
      * Creates new form Contraseña
      */
+    Conexiones cc = new Conexiones();
+    Connection cn = cc.conexion1();
+
     public Contraseña() {
         initComponents();
+    }
+
+    void acceder(String user, String pass) {
+//SELECT * FROM usuario, administrador where administrador.nombre1a = 'fer' && administrador.idclave = 12 OR usuario.nombre1u= 'sara';
+        String cap = "";
+        String sql = "SELECT * FROM administrador,usuario WHERE administrador.nombre1a = '" + user + "' && administrador.idclave =" + pass + "'";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                cap = rs.getString("tipousuario");
+            }
+            if (cap.equals("Administrador")) {
+                System.out.println("ustes esta en Drawing " + user);
+                this.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Bienvenidos");
+                Maestro ingreso = new Maestro();
+                ingreso.setVisible(true);
+                ingreso.pack();
+
+            }
+            if ((!cap.equals("Administrador"))) {
+                JOptionPane.showMessageDialog(this, "No Existe este Usuario ...");
+            }
+        } catch (SQLException ex) {
+            System.out.println("No Existe este admin ");
+        }
+
     }
 
     /**
@@ -33,7 +69,8 @@ public class Contraseña extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         Usuario = new javax.swing.JTextField();
         Contraseña = new javax.swing.JPasswordField();
-        Entrar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,10 +84,17 @@ public class Contraseña extends javax.swing.JFrame {
             }
         });
 
-        Entrar.setText("Entrar");
-        Entrar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                EntrarMouseClicked(evt);
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("entrar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -58,25 +102,30 @@ public class Contraseña extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(105, 105, 105)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Usuario)
-                    .addComponent(Contraseña, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
-                .addContainerGap(119, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Entrar)
-                .addGap(127, 127, 127))
+                .addComponent(jButton1)
+                .addGap(128, 128, 128))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(105, 105, 105)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Usuario)
+                            .addComponent(Contraseña, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(269, Short.MAX_VALUE)
+                .addContainerGap(179, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(58, 58, 58)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(Usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -84,14 +133,12 @@ public class Contraseña extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(Contraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addComponent(Entrar)
-                .addGap(84, 84, 84))
+                .addGap(32, 32, 32)
+                .addComponent(jButton2)
+                .addGap(80, 80, 80))
         );
 
-        jLabel1.getAccessibleContext().setAccessibleName("Usuario");
         Usuario.getAccessibleContext().setAccessibleName("Usuario");
-        Entrar.getAccessibleContext().setAccessibleName("Entrar");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -100,28 +147,44 @@ public class Contraseña extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ContraseñaActionPerformed
 
-    private void EntrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EntrarMouseClicked
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-        String admin = "admin";
-        String pass = "12345";
-        
-        String pass2 = new String(Contraseña.getPassword());
-        
-        if(Usuario.getText().equals(admin) && pass2.equals(pass)){
-            
-            Maestro ms = new Maestro();
-            ms.setVisible(true);
-            dispose();
+
+        if (cn == null) {
+            JOptionPane.showMessageDialog(null, "No conectado");
         } else {
-            JOptionPane.showMessageDialog(this, "Usuario Incorrecto");
+            JOptionPane.showMessageDialog(null, "conectado");
         }
-        
-    }//GEN-LAST:event_EntrarMouseClicked
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String usu = Usuario.getText();
+        String pass = new String(Contraseña.getPassword());
+        acceder(usu, pass);
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    //        String usu = Usuario.getText();
+//        String pass = new String(Contraseña.getPassword());
+//        acceder(usu, pass);
+//        
+//        String admin = "admin";
+//        String pass = "12345";
+//        
+//        String pass2 = new String(Contraseña.getPassword());
+//        
+//        if(Usuario.getText().equals(admin) && pass2.equals(pass)){
+//            
+//            Maestro ms = new Maestro();
+//            ms.setVisible(true);
+//            dispose();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Usuario Incorrecto");
+//        }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -156,8 +219,9 @@ public class Contraseña extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField Contraseña;
-    private javax.swing.JButton Entrar;
     private javax.swing.JTextField Usuario;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
