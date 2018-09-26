@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import Interfaces.admin.Master_admin;
+import Interfaces.usuario.Master_user;
 
 /**
  *
@@ -30,28 +32,40 @@ public class Contraseña extends javax.swing.JFrame {
 
     void acceder(String user, String pass) {
 //SELECT * FROM usuario, administrador where administrador.nombre1a = 'fer' && administrador.idclave = 12 OR usuario.nombre1u= 'sara';
-        String cap = "";
-        String sql = "SELECT * FROM administrador,usuario WHERE administrador.nombre1a = '" + user + "' && administrador.idclave =" + pass + "'";
+//SELECT nombre1a,idclave, nombre1u, idpass FROM usuario, administrador where administrador.nombre1a = 'eliot' && administrador.idclave = '123' OR usuario.nombre1u= 'karen' && usuario.idpass = '123';
+        String capU = "";
+        String capA = "";
+        String sql = "SELECT nombre1a,idclave, nombre1u, idpass FROM usuario, administrador where administrador.nombre1a = '" + user + "' && administrador.idclave = '" + pass + "' OR usuario.nombre1u= '" + user + "' && usuario.idpass = '" + pass + "';";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                cap = rs.getString("tipousuario");
+                capA = rs.getString("nombre1a");
+                capU = rs.getString("nombre1u");
             }
-            if (cap.equals("Administrador")) {
+            if (capU.equals(user)) {
                 System.out.println("ustes esta en Drawing " + user);
                 this.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Bienvenidos");
-                Maestro ingreso = new Maestro();
+                Master_user ingreso = new Master_user();
                 ingreso.setVisible(true);
                 ingreso.pack();
 
             }
-            if ((!cap.equals("Administrador"))) {
-                JOptionPane.showMessageDialog(this, "No Existe este Usuario ...");
-            }
+            if (capA.equals(user)){
+                System.out.println("ustes esta en Drawing " + user);
+                this.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Bienvenidos");
+                Master_admin ingreso = new Master_admin();
+                ingreso.setVisible(true);
+                ingreso.pack();
+                
+            }            
+//            if ((!capU.equals(user)) || (!capA.equals(user))) {
+//                JOptionPane.showMessageDialog(this, "No Existe este Usuario ...");
+//            }
         } catch (SQLException ex) {
-            System.out.println("No Existe este admin ");
+            System.out.println("Tienes un error de sentencia ");
         }
 
     }
